@@ -76,7 +76,7 @@ program
             if (error) {
               console.error(error)
             } else {
-              spinner.succeed("成功")
+              spinner.succeed("🔥 项目创建成功 🔥")
             }
           })
         }

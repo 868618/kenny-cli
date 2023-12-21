@@ -1,6 +1,6 @@
 {
   "name": "kenny-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "kenny-cli is a tool for kenny",
   "bin": {
     "kenny": "./bin/cli.js"
