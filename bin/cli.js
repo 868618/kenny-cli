@@ -56,12 +56,16 @@ program
     }
 
     const spinner = ora({
-      text: "获取远程模板",
+      text: "获取模板列表",
       color: "yellow",
     }).start()
 
     getTemplateList()
       .then((res) => {
+        spinner.succeed("1、模板列表获取成功")
+
+        const downloadSpinner = ora("开始下载模板").start()
+
         const fullNames = res.data
           .filter((i) => {
             const { visibility, name } = i
@@ -76,13 +80,15 @@ program
             if (error) {
               console.error(error)
             } else {
-              spinner.succeed("🔥 项目创建成功 🔥")
+              downloadSpinner.succeed("2、模板下载成功")
+
+              ora("").start().succeed("success:🔥 项目创建成功 🔥")
             }
           })
         }
       })
-      .finally(() => {
-        spinner.stop()
+      .catch((error) => {
+        console.error("AT-[ error &&&&&********** ]", error)
       })
   })
 
