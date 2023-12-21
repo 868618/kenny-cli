@@ -1,15 +1,19 @@
 {
   "name": "kenny-cli",
   "version": "1.0.0",
-  "description": "create a base application with default",
+  "description": "kenny-cli is a tool for kenny",
   "bin": {
     "kenny": "./bin/cli.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/868618/kenny-cli.git"
+  },
   "keywords": [],
-  "author": "",
+  "author": "kenny",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.6.2",
