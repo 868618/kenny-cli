@@ -12,7 +12,11 @@
     "type": "git",
     "url": "https://github.com/868618/kenny-cli.git"
   },
-  "keywords": [],
+  "keywords": [
+    "Kenny",
+    "kenny",
+    "刘坤"
+  ],
   "author": "kenny",
   "license": "ISC",
   "dependencies": {
