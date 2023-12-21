@@ -10,16 +10,12 @@ const program = require("commander")
 const ora = require("ora")
 const getTemplateList = require("../lib/getTemplateList")
 const downloadGitRepo = require("download-git-repo")
-// const axios = require("axios")
 
 program
   // 定义命令和参数
   .command("create <app-name>")
   .description("创建新项目")
   .action(async (name) => {
-    // 打印执行结果
-    console.log("name:", name)
-
     // 当前命令行选择的目录
     const cwd = process.cwd()
     // 需要创建的目录地址
