@@ -66,26 +66,62 @@ program
 
         const downloadSpinner = ora("开始下载模板").start()
 
-        const fullNames = res.data
+        const cloneUrls = res.data
           .filter((i) => {
             const { visibility, name } = i
             return visibility == "public" && name.startsWith("template-")
           })
-          .map((i) => i.full_name)
+          .map((i) => i.clone_url)
 
-        if (fullNames.length == 1) {
-          const [fullName] = fullNames
+        // const fullNames = res.data
+        //   .filter((i) => {
+        //     const { visibility, name } = i
+        //     return visibility == "public" && name.startsWith("template-")
+        //   })
+        //   .map((i) => i.full_name)
 
-          downloadGitRepo(fullName, targetDir, (error) => {
-            if (error) {
-              console.error(error)
-            } else {
-              downloadSpinner.succeed("2、模板下载成功")
+        if (cloneUrls.length == 1) {
+          const [cloneUrl] = cloneUrls
 
-              ora("").start().succeed("success:🔥 项目创建成功 🔥")
-            }
-          })
+          const url =
+            "direct:" +
+            cloneUrl.replace("/868618", "/k868618").replace("github", "gitee")
+
+          downloadGitRepo(
+            url,
+            targetDir,
+            {
+              clone: true,
+
+              depth: 1,
+            },
+            (error) => {
+              if (error) {
+                console.error(error)
+              } else {
+                downloadSpinner.succeed("2、模板下载成功")
+
+                ora("")
+                  .start()
+                  .succeed("success:🔥 项目创建成功。年轻人，好好干 🔥")
+              }
+            },
+          )
         }
+
+        // if (fullNames.length == 1) {
+        //   const [fullName] = fullNames
+
+        //   downloadGitRepo(fullName, targetDir, (error) => {
+        //     if (error) {
+        //       console.error(error)
+        //     } else {
+        //       downloadSpinner.succeed("2、模板下载成功")
+
+        //       ora("").start().succeed("success:🔥 项目创建成功 🔥")
+        //     }
+        //   })
+        // }
       })
       .catch((error) => {
         console.error("AT-[ error &&&&&********** ]", error)
