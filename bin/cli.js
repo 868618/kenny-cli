@@ -60,72 +60,31 @@ program
       color: "yellow",
     }).start()
 
-    getTemplateList()
-      .then((res) => {
-        spinner.succeed("1、模板列表获取成功")
+    const templateList = await getTemplateList()
 
-        const downloadSpinner = ora("开始下载模板").start()
+    spinner.succeed("1、模板列表获取成功")
 
-        const cloneUrls = res.data
-          .filter((i) => {
-            const { visibility, name } = i
-            return visibility == "public" && name.startsWith("template-")
-          })
-          .map((i) => i.clone_url)
+    const downloadSpinner = ora("开始下载模板").start()
 
-        // const fullNames = res.data
-        //   .filter((i) => {
-        //     const { visibility, name } = i
-        //     return visibility == "public" && name.startsWith("template-")
-        //   })
-        //   .map((i) => i.full_name)
+    const cloneUrls = templateList.map((i) => i.ssh_url)
 
-        if (cloneUrls.length == 1) {
-          const [cloneUrl] = cloneUrls
+    if (cloneUrls.length == 1) {
+      const [cloneUrl] = cloneUrls
 
-          const url =
-            "direct:" +
-            cloneUrl.replace("/868618", "/k868618").replace("github", "gitee")
+      const repo = `direct:${cloneUrl}`
 
-          downloadGitRepo(
-            url,
-            targetDir,
-            {
-              clone: true,
+      const options = { clone: true, depth: 1 }
 
-              depth: 1,
-            },
-            (error) => {
-              if (error) {
-                console.error(error)
-              } else {
-                downloadSpinner.succeed("2、模板下载成功")
+      downloadGitRepo(repo, targetDir, options, (error) => {
+        if (error) {
+          console.error(`downloadGitRepo ${repo} error:`, error)
+        } else {
+          downloadSpinner.succeed("2、模板下载成功")
 
-                ora("")
-                  .start()
-                  .succeed("success:🔥 项目创建成功。年轻人，好好干 🔥")
-              }
-            },
-          )
+          ora().succeed("success:🔥 项目创建成功。年轻人，好好干 🔥")
         }
-
-        // if (fullNames.length == 1) {
-        //   const [fullName] = fullNames
-
-        //   downloadGitRepo(fullName, targetDir, (error) => {
-        //     if (error) {
-        //       console.error(error)
-        //     } else {
-        //       downloadSpinner.succeed("2、模板下载成功")
-
-        //       ora("").start().succeed("success:🔥 项目创建成功 🔥")
-        //     }
-        //   })
-        // }
       })
-      .catch((error) => {
-        console.error("AT-[ error &&&&&********** ]", error)
-      })
+    }
   })
 
 program

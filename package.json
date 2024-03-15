@@ -1,12 +1,13 @@
 {
   "name": "kenny-cli",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "kenny-cli is a tool for kenny",
   "bin": {
     "kenny": "./bin/cli.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "temp": "node ./lib/temp.js"
   },
   "repository": {
     "type": "git",
@@ -15,6 +16,7 @@
   "keywords": [
     "Kenny",
     "kenny",
+    "kenny-cli",
     "刘坤"
   ],
   "author": "kenny",
