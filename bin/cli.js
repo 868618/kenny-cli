@@ -64,27 +64,37 @@ program
 
     spinner.succeed("1、模板列表获取成功")
 
+    const choices = templateList.map((i) => {
+      return {
+        name: i.name.replace(/^template-/gi, ""),
+        value: `direct:${i.ssh_url}`,
+      }
+    })
+
+    const result = await inquirer.prompt([
+      {
+        type: "list",
+        name: "repo",
+        message: "请选择要创建的项目",
+        choices,
+        askAnswered: false,
+      },
+    ])
+
     const downloadSpinner = ora("开始下载模板").start()
 
-    const cloneUrls = templateList.map((i) => i.ssh_url)
+    const options = { clone: true, depth: 1 }
 
-    if (cloneUrls.length == 1) {
-      const [cloneUrl] = cloneUrls
+    downloadGitRepo(result.repo, targetDir, options, (error) => {
+      if (error) {
+        console.error(`downloadGitRepo ${repo} error:`, error)
+      } else {
+        downloadSpinner.succeed("2、模板下载成功")
 
-      const repo = `direct:${cloneUrl}`
-
-      const options = { clone: true, depth: 1 }
-
-      downloadGitRepo(repo, targetDir, options, (error) => {
-        if (error) {
-          console.error(`downloadGitRepo ${repo} error:`, error)
-        } else {
-          downloadSpinner.succeed("2、模板下载成功")
-
-          ora().succeed("success:🔥 项目创建成功。年轻人，好好干 🔥")
-        }
-      })
-    }
+        ora().succeed("success:🔥 项目创建成功。年轻人，好好干 🔥")
+        console.log(`cd .${path.sep}${path.relative(process.cwd(), targetDir)}`)
+      }
+    })
   })
 
 program
@@ -106,17 +116,3 @@ program.on("--help", () => {
 
 // 解析用户执行命令传入参数
 program.parse(process.argv)
-
-// inquirer
-//   .prompt([
-//     {
-//       type: "input", //type： input, number, confirm, list, checkbox ...
-//       name: "name", // key 名
-//       message: "Your name", // 提示信息
-//       default: "my-node-cli", // 默认值
-//     },
-//   ])
-//   .then((answers) => {
-//     // 打印互用输入结果
-//     console.log(answers)
-//   })
